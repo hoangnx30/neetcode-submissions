@@ -1,0 +1,32 @@
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        ROWS, COLS = len(board), len(board[0])
+
+        def backtrack(row, col, idx):
+            if idx == len(word):
+                return True
+
+            if row < 0 or row >= ROWS or col < 0 or col >= COLS or board[row][col] != word[idx]:
+                return False
+
+            char = board[row][col]
+            board[row][col] = "*"
+
+            res = (
+                backtrack(row + 1, col, idx + 1)
+                or backtrack(row - 1, col, idx + 1)
+                or backtrack(row, col + 1, idx + 1)
+                or backtrack(row, col - 1, idx + 1)
+            )
+
+            board[row][col] = char
+
+            return res
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if backtrack(r, c, 0):
+                    return True
+
+        return False
+
